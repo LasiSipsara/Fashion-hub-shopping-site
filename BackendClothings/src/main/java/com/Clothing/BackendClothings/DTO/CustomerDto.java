@@ -1,6 +1,5 @@
 package com.Clothing.BackendClothings.DTO;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,5 +21,7 @@ public class CustomerDto {
 
     String postalCode;
     String address;
+     String role ;
+
 
 }

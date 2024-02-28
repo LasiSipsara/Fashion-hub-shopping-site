@@ -19,17 +19,19 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
 
-    Long id;
-    String firstName;
-    String lastName;
+   private Long id;
+ private    String firstName;
+  private   String lastName;
     @Column(name = "email_address")
-    String email;
+  private   String email;
 
-    String password;
-    String city;
+   private String password;
+   private String city;
     @Column(name = "postal_code")
-    String postalCode;
-    String address;
+   private String postalCode;
+   private String address;
+    private String role ;
+    private boolean enabled = false;
 
 
 }
