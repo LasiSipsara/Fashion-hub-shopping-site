@@ -8,4 +8,6 @@ public interface CustomerService {
      CustomerDto  CreateCustomer(CustomerDto customerDto);
 
     void saveTokenForCustomerVerification(String token, Customer customer);
+
+    String validateVerificationToken(String token);
 }

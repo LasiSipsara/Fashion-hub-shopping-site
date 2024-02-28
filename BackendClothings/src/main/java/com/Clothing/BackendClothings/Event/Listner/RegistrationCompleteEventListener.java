@@ -31,14 +31,8 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
         String url = event.getUrl() + "/verifyRegistration?token=" + token;
 
 
-        String subject = "Complete Registration";
-        String text = "Dear " + customer.getFirstName() + ",\n\n"
-                + "Please click on the following link to complete your registration:\n"
-                + url;
-
-
-        emailService.sendEmail(customer.getEmail(), subject, text);
-
-        log.info("Email sent for registration confirmation to: {}", customer.getEmail());
+        //sendVerificationEmail()
+        log.info("Click the link to verify your account: {}",
+                url);
     }
 }

@@ -30,6 +30,15 @@ public class RegistrationController {
         return new ResponseEntity<>(customerDto1, HttpStatus.CREATED);
 
     }
+
+    @GetMapping("/verifyRegistration")
+    public String verifyRegistration(@RequestParam String token){
+       String result = customerService.validateVerificationToken(token);
+       if(result.equalsIgnoreCase("valid")){
+           return  "User verified Successfully";
+       }
+        return "Bad User";
+    }
     private String applicationUrl(HttpServletRequest request ){
         return  "http://" + request.getServerName()+":"+request.getServerPort()+request.getContextPath();
 
