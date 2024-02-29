@@ -14,7 +14,15 @@ public class WebSecurityConfig {
 
     private static final String[] WHITE_LIST_URLS = {
             "/api/v1/register",
-            "/api/v1/addOrderItems"
+            "/api/v1/addOrderItems",
+            "/api/v1/products",
+            "/api/v1/product/AllProducts",
+            "/api/v1/product/productId",
+            "/api/v1/product/search",
+            "/api/v1/product/ProductCategory",
+            "/api/v1/product/UpdateQuantity",
+            "/api/v1/product/AddProduct"
+
 
     };
 

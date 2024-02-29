@@ -29,7 +29,7 @@ public class ProductService {
 
     public ResponseEntity<Product> getProductById(int productId) {
         try {
-            Product product = productRepository.getProductById(productId);
+            Product product = productRepository.getProductByProductId(productId);
             if (product!=null){
                 return new ResponseEntity<>(product, HttpStatus.OK);
             }else{
@@ -77,7 +77,7 @@ public class ProductService {
     public ResponseEntity<String> updateProductAvailableAmount(int productId,int boughtAmount) {
 
       try{
-          Product product=productRepository.getProductById(productId);
+          Product product=productRepository.getProductByProductId(productId);
           int availableAmount=product.getAvailableQuantity();
           int newQuantity=availableAmount-boughtAmount;
           product.setAvailableQuantity(newQuantity);
