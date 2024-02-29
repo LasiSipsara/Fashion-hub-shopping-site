@@ -32,6 +32,8 @@ public class ShoppingCartRestController {
     private Logger logger = (Logger) LoggerFactory.getLogger(ShoppingCartRestController.class);
 
 
+
+
     @GetMapping("/test")
     public ResponseEntity<List<ShoppingCart>> getShoppingCartDetailsByUser (@PathVariable long customer_id){
         List<ShoppingCart> cartList = shoppingCartService.getShoppingCartDetailsByUserId(customer_id);
