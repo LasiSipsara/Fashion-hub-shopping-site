@@ -56,7 +56,7 @@ public class ShoppingCartRestController {
     @PostMapping("/addToCart/{customer_id}")
     public String placeOrder(@PathVariable long customer_id, @RequestBody AddToCartDTO addToCartDTO) throws ProductException {
         logger.info("Request Payload" + addToCartDTO.toString());
-        Customer customer = CustomerService.getCustomerByCustomerId(customer_id);
+        Customer customer = customerService.getCustomerByCustomerId(customer_id);
         Product product = productService.getProductById(addToCartDTO.getProduct_id());
         ShoppingCart existingCart = null;
         existingCart = shoppingCartService.FindShoppingCartByCustomerAndProduct(customer_id,product.getProductId());
