@@ -2,17 +2,14 @@ package com.Clothing.BackendClothings.Controller;
 
 
 import com.Clothing.BackendClothings.DTO.AddToCartDTO;
-import com.Clothing.BackendClothings.DTO.CustomerDto;
 import com.Clothing.BackendClothings.Entity.Customer;
 import com.Clothing.BackendClothings.Entity.Product;
 import com.Clothing.BackendClothings.Entity.ShoppingCart;
 import com.Clothing.BackendClothings.Exception.ProductException;
-import com.Clothing.BackendClothings.Service.CustomerImpl;
 import com.Clothing.BackendClothings.Service.CustomerService;
 import com.Clothing.BackendClothings.Service.ProductService;
 import com.Clothing.BackendClothings.Service.ShoppingCartService;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +53,7 @@ public class ShoppingCartRestController {
     @PostMapping("/addToCart/{customer_id}")
     public String placeOrder(@PathVariable long customer_id, @RequestBody AddToCartDTO addToCartDTO) throws ProductException {
         logger.info("Request Payload" + addToCartDTO.toString());
-        Customer customer = customerService.getCustomerByCustomerId(customer_id);
+        Customer customer = customerService.getCustomerById(customer_id);
         Product product = productService.getProductById(addToCartDTO.getProduct_id());
         ShoppingCart existingCart = null;
         existingCart = shoppingCartService.FindShoppingCartByCustomerAndProduct(customer_id,product.getProductId());
@@ -79,7 +76,7 @@ public class ShoppingCartRestController {
                 shoppingCartService.saveShoppingCart(cartItem);
                 int newQuantity = product.getAvailableQuantity() - addToCartDTO.getQuantity();
                 product.setAvailableQuantity(newQuantity);
-                product = productService.addNewProduct(product);
+                productService.addNewProduct(product);
                 logger.info("Order processed successfully");
                 return "Successfully Added to Cart";
             } else {
@@ -102,7 +99,7 @@ public class ShoppingCartRestController {
             if (shoppingCart.getQuantity()>quantity){
                 int difference = shoppingCart.getQuantity() - quantity;
                 product.setAvailableQuantity(product.getAvailableQuantity()+difference);
-                product = productService.addNewProduct(product);
+                productService.addNewProduct(product);
             }
             shoppingCart.setQuantity(quantity);
             shoppingCart.setAmount(newAmount);
@@ -124,7 +121,7 @@ public class ShoppingCartRestController {
         Product product = productService.getProductById(shoppingCart.getProduct_id());
         int newQuantity = quantity + product.getAvailableQuantity();
         product.setAvailableQuantity(newQuantity);
-        product = productService.addNewProduct(product);
+        productService.addNewProduct(product);
         shoppingCartService.DeleteShoppingCart(shoppingCart);
         if (shoppingCart == null) {
             return "Can't update the cart";

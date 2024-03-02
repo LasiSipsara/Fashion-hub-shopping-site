@@ -4,8 +4,6 @@ import com.Clothing.BackendClothings.Entity.Product;
 import com.Clothing.BackendClothings.Exception.ProductException;
 import com.Clothing.BackendClothings.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +32,7 @@ public class ProductService {
 
     public Product getProductById(int productId) throws ProductException {
         try {
-            Product product = productRepository.getProductByProductId(productId);
+            Product product = productRepository.findByProductId(productId);
             if (product!=null){
                 return product;
             }else{
@@ -64,7 +62,7 @@ public class ProductService {
 
     public List<Product> getProductByCategoryId(int categoryId) throws ProductException {
         try{
-          List<Product> productList=productRepository.getProductByCategoryId(categoryId);
+          List<Product> productList=productRepository.findByCategoryId(categoryId);
           if(productList!=null){
              return productList;
           }else{
@@ -79,7 +77,7 @@ public class ProductService {
     public String updateProductAvailableAmount(int productId,int boughtAmount) throws ProductException {
 
       try{
-          Product product=productRepository.getProductByProductId(productId);
+          Product product=productRepository.findByProductId(productId);
           if(product==null){
               return "product not found";
           }
@@ -107,7 +105,7 @@ public class ProductService {
 
     public String updateProduct(int productId, Product updatedProduct) throws ProductException {
         try{
-            Product existingProduct= productRepository.getProductByProductId(productId);
+            Product existingProduct= productRepository.findByProductId(productId);
             existingProduct.setProductId(updatedProduct.getProductId());
             existingProduct.setProductName(updatedProduct.getProductName());
             existingProduct.setImage(updatedProduct.getImage());

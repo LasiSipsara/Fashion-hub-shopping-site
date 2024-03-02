@@ -5,6 +5,8 @@ import com.Clothing.BackendClothings.Repository.OrderItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class OrderItemService  {
     @Autowired
@@ -12,5 +14,9 @@ public class OrderItemService  {
     public OrderItem saveOrderItem(OrderItem orderItem){
         OrderItem orderItem1= orderItemRepository.save(orderItem);
         return orderItem1;
+    }
+
+    public List<OrderItem> getAllOrderItems(){
+        return  orderItemRepository.findAll();
     }
 }

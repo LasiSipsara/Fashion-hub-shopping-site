@@ -10,28 +10,30 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-
-public class Customer {
-
-
+public class Customer
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
+    private Long id;
 
-   private Long id;
- private    String firstName;
-  private   String lastName;
-    @Column(name = "email_address")
-  private   String email;
+    private String firstname;
+    private String lastname;
+    private String email;
+    private String password;
+    private String address;
+    private String city;
+    private String postalCode;
 
-   private String password;
-   private String city;
-    @Column(name = "postal_code")
-   private String postalCode;
-   private String address;
-    private String role ;
-    private boolean enabled = false;
+    public Customer(Long id, String firstName, String lastName, String email, String password, String city, String postalCode, String address, String user, boolean b) {
+    }
 
 
+    public String getFirstName() {
+        return this.firstname;
+    }
+
+    public String getLastName() {
+        return this.lastname;
+    }
 }

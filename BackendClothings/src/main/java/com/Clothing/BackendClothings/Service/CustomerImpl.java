@@ -1,67 +1,44 @@
 package com.Clothing.BackendClothings.Service;
 
 
-import com.Clothing.BackendClothings.Config.WebSecurityConfig;
-import com.Clothing.BackendClothings.DTO.CustomerDto;
 import com.Clothing.BackendClothings.Entity.Customer;
-import com.Clothing.BackendClothings.Entity.VerificationToken;
-import com.Clothing.BackendClothings.Mapping.CustomerMapper;
 import com.Clothing.BackendClothings.Repository.CustomerRepository;
-import com.Clothing.BackendClothings.Repository.VerificationTokenRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Calendar;
 
 @Service
 
 public class CustomerImpl implements  CustomerService {
     @Autowired
-    private CustomerRepository  customerRepository;
-    @Autowired
-    private VerificationTokenRepository verificationTokenRepository;
-
+    private CustomerRepository customerRepository;
 
     @Override
-    public CustomerDto CreateCustomer(CustomerDto customerDto) {
-        Customer customer = customerRepository.save(CustomerMapper.customerDtoToCostumer(customerDto));
-        return CustomerMapper.customerToCustomerDto(customer);
+    public Customer saveCustomer(Customer newCustomer) {
+        return customerRepository.save(newCustomer);
     }
 
     @Override
-    public void saveTokenForCustomerVerification(String token, Customer customer) {
-      VerificationToken verificationToken = new VerificationToken(token,customer);
-      verificationTokenRepository.save(verificationToken);
-    }
+    public Customer getCustomer(Customer loginCustomer) {
+        Customer existingCustomer = customerRepository.findByEmailAndPassword(loginCustomer.getEmail(), loginCustomer.getPassword());
 
-    @Override
-    public String validateVerificationToken(String token) {
-        VerificationToken verificationToken = verificationTokenRepository.findByToken(token);
-        if (verificationToken == null) {
-            return "invalid";
+        if (existingCustomer != null) {
+
+            return existingCustomer;
+        } else {
+
+            return null;
         }
-
-        Customer customer= verificationToken.getCustomer();
-        Calendar cal = Calendar.getInstance();
-
-        if ((verificationToken.getExpirationTime().getTime()
-                - cal.getTime().getTime()) <= 0) {
-            verificationTokenRepository.delete(verificationToken);
-            return "expired";
-        }
-
-        customer.setEnabled(true);
-        customerRepository.save(customer);
-        return "valid";
     }
 
     @Override
-    public Customer getCustomerByCustomerId(long customerId){
-        Customer customer=customerRepository.getCustomerByCustomerId(customerId);
-        return customer;
+    public Boolean findByEmail(String email) {
+        return  customerRepository.existsByEmail(email);
     }
 
+    @Override
+    public Customer getCustomerById(long customerId) {
+       return customerRepository.findByCustomerId(customerId);
+    }
 
 }
 

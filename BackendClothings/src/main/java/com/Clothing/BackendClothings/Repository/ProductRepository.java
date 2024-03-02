@@ -16,9 +16,9 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> searchProductByValue(@Param("searchValue") String searchValue);
 
 
-    List<Product> getProductByCategoryId(int categoryId);
+    List<Product> findByCategoryId(int categoryId);
 
-    Product getProductByProductId(int productId);
+    Product findByProductId(int productId);
 
     Boolean deleteByProductId(int deleteProductId);
 }

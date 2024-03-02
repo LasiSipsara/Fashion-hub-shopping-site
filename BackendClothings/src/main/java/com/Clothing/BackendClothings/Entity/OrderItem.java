@@ -23,6 +23,11 @@ public class OrderItem {
 
     }
 
+    public  OrderItem(){
+        //Default Constructor to Get OrderItems
+    }
+
+
     @Override
     public String toString() {
         return "OrderItem{" +

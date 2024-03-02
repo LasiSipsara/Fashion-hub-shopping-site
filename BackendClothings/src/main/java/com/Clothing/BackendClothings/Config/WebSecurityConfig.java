@@ -21,7 +21,10 @@ public class WebSecurityConfig {
             "/api/v1/product/search",
             "/api/v1/product/ProductCategory",
             "/api/v1/product/UpdateQuantity",
-            "/api/v1/product/AddProduct"
+            "/api/v1/product/AddProduct",
+            "/user/check-email/{email}",
+            "/login",
+            "/user"
 
 
     };
