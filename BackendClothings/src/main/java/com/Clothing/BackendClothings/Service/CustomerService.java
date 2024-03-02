@@ -5,10 +5,16 @@ import com.Clothing.BackendClothings.Entity.Customer;
 
 public interface CustomerService {
 
-     CustomerDto  CreateCustomer(CustomerDto customerDto);
+     Customer getCustomerByCustomerId(long customerId);
+
+
+
+    CustomerDto  CreateCustomer(CustomerDto customerDto);
 
     void saveTokenForCustomerVerification(String token, Customer customer);
 
     String validateVerificationToken(String token);
+
+
 
 }

@@ -56,6 +56,12 @@ public class CustomerImpl implements  CustomerService {
         return "valid";
     }
 
+    @Override
+    public Customer getCustomerByCustomerId(long customerId){
+        Customer customer=customerRepository.getCustomerByCustomerId(customerId);
+        return customer;
+    }
+
 
 }
 
