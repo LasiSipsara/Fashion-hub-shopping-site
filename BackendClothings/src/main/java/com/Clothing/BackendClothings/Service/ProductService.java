@@ -1,6 +1,7 @@
 package com.Clothing.BackendClothings.Service;
 
 import com.Clothing.BackendClothings.Entity.Product;
+import com.Clothing.BackendClothings.Exception.ProductException;
 import com.Clothing.BackendClothings.Repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -17,86 +19,119 @@ public class ProductService {
     private ProductRepository productRepository;
 
 
-    public ResponseEntity<List<Product>> getAllProducts() {
+    public List<Product> getAllProducts() throws ProductException {
         try{
-          return new ResponseEntity<>(this.productRepository.findAll(), HttpStatus.OK);
-
+          List<Product> productList= this.productRepository.findAll();
+          if(productList==null){
+              return Collections.emptyList();
+          }else{
+              return productList;
+          }
         }catch(Exception e){
-          e.printStackTrace();
+         throw  new ProductException("An error occurred while processing ",e);
         }
-        return new ResponseEntity<>(new ArrayList<>(),HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Product> getProductById(int productId) {
+    public Product getProductById(int productId) throws ProductException {
         try {
             Product product = productRepository.getProductByProductId(productId);
             if (product!=null){
-                return new ResponseEntity<>(product, HttpStatus.OK);
+                return product;
             }else{
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return null;
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
+           throw new ProductException("Error occurred while processing",e);
 
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 
-    public ResponseEntity<List<Product>> searchProduct(String searchValue) {
+    public List<Product> searchProduct(String searchValue) throws ProductException {
         try {
             List<Product> searchProductList = productRepository.searchProductByValue(searchValue);
             if (searchProductList != null) {
-                return new ResponseEntity<>(searchProductList, HttpStatus.OK);
+                return searchProductList;
             }else{
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return Collections.emptyList();
             }
-
         } catch (Exception e) {
-           e.printStackTrace();
-
+         throw new ProductException("Error occurred while searching",e);
         }
-        return  new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
-    public ResponseEntity<List<Product>> getProductByCategoryId(int categoryId) {
+    public List<Product> getProductByCategoryId(int categoryId) throws ProductException {
         try{
           List<Product> productList=productRepository.getProductByCategoryId(categoryId);
           if(productList!=null){
-              return new ResponseEntity<>(productList,HttpStatus.OK);
+             return productList;
           }else{
-              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+              return Collections.emptyList();
           }
         }catch(Exception e){
-           e.printStackTrace();
+          throw new ProductException("Error occurred while processing",e);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
-    public ResponseEntity<String> updateProductAvailableAmount(int productId,int boughtAmount) {
+    public String updateProductAvailableAmount(int productId,int boughtAmount) throws ProductException {
 
       try{
           Product product=productRepository.getProductByProductId(productId);
+          if(product==null){
+              return "product not found";
+          }
           int availableAmount=product.getAvailableQuantity();
           int newQuantity=availableAmount-boughtAmount;
           product.setAvailableQuantity(newQuantity);
-          return new ResponseEntity<>(HttpStatus.OK);
+          return "successfully updated";
       }catch(Exception e){
-          e.printStackTrace();
+          throw new ProductException("Error occurred while updating",e);
       }
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
 
     //admin side operations
-    public ResponseEntity<String> addNewProduct(Product product) {
+    public String addNewProduct(Product product) throws ProductException {
         try{
-            this.productRepository.save(product);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            productRepository.save(product);
+            return "Product added successfully";
         }catch(Exception e){
-            e.printStackTrace();
+            throw new ProductException("Error occurred while adding new product",e);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
+
+    public String updateProduct(int productId, Product updatedProduct) throws ProductException {
+        try{
+            Product existingProduct= productRepository.getProductByProductId(productId);
+            existingProduct.setProductId(updatedProduct.getProductId());
+            existingProduct.setProductName(updatedProduct.getProductName());
+            existingProduct.setImage(updatedProduct.getImage());
+            existingProduct.setSize(updatedProduct.getSize());
+            existingProduct.setAvailableQuantity(updatedProduct.getAvailableQuantity());
+            existingProduct.setDescription(updatedProduct.getDescription());
+            existingProduct.setCategoryId(updatedProduct.getCategoryId());
+
+            productRepository.save(existingProduct);
+            return "Product updated successfully";
+        }catch(Exception e){
+            throw new ProductException("Error occurred while updating",e);
+        }
+
+    }
+
+    public String deleteProduct(int deleteProductId) throws ProductException {
+        try{
+         productRepository.deleteByProductId(deleteProductId);
+         return "Product deleted successfully";
+
+        }catch (Exception e){
+           throw new ProductException("Error occurred while deleting",e);
+        }
+
     }
 }

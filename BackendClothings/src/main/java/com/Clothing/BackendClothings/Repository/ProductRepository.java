@@ -20,4 +20,5 @@ public interface ProductRepository extends JpaRepository<Product,Integer> {
 
     Product getProductByProductId(int productId);
 
+    Boolean deleteByProductId(int deleteProductId);
 }

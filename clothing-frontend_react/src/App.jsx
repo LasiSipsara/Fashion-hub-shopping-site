@@ -4,7 +4,7 @@ import LoginForm from "./Components/LoginForm";
 import "bootstrap/dist/css/bootstrap.min.css";
 import RegsitrationForm from "./Components/RegsitrationForm";
 import { FaUser } from "react-icons/fa";
-import Home from "./Components/Home";
+import Home from "./pages/Home";
 
 
 function App() {

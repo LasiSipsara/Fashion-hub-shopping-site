@@ -11,6 +11,7 @@ import com.Clothing.BackendClothings.Service.CustomerService;
 import com.Clothing.BackendClothings.Service.ProductService;
 import com.Clothing.BackendClothings.Service.ShoppingCartService;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +55,7 @@ public class ShoppingCartRestController {
     @PostMapping("/addToCart/{customer_id}")
     public String placeOrder(@PathVariable long customer_id, @RequestBody AddToCartDTO addToCartDTO){
         logger.info("Request Payload" + addToCartDTO.toString());
-        Customer customer = CustomerService.getCustomer(customer_id);
+        Customer customer = CustomerService.getCustomerByCustomerId(customer_id);
         Product product = productService.getProductById(addToCartDTO.getProduct_id());
         ShoppingCart existingCart = null;
         existingCart = shoppingCartService.FindShoppingCartByCustomerAndProduct(customer_id,product.getProductId());
