@@ -5,6 +5,7 @@ import com.Clothing.BackendClothings.Entity.Customer;
 
 public interface CustomerService {
 
+     Customer getCustomerByCustomerId(long customerId);
      CustomerDto  CreateCustomer(CustomerDto customerDto);
 
     void saveTokenForCustomerVerification(String token, Customer customer);

@@ -6,6 +6,7 @@ import com.Clothing.BackendClothings.DTO.CustomerDto;
 import com.Clothing.BackendClothings.Entity.Customer;
 import com.Clothing.BackendClothings.Entity.Product;
 import com.Clothing.BackendClothings.Entity.ShoppingCart;
+import com.Clothing.BackendClothings.Exception.ProductException;
 import com.Clothing.BackendClothings.Service.CustomerImpl;
 import com.Clothing.BackendClothings.Service.CustomerService;
 import com.Clothing.BackendClothings.Service.ProductService;
@@ -53,7 +54,7 @@ public class ShoppingCartRestController {
     }
 
     @PostMapping("/addToCart/{customer_id}")
-    public String placeOrder(@PathVariable long customer_id, @RequestBody AddToCartDTO addToCartDTO){
+    public String placeOrder(@PathVariable long customer_id, @RequestBody AddToCartDTO addToCartDTO) throws ProductException {
         logger.info("Request Payload" + addToCartDTO.toString());
         Customer customer = CustomerService.getCustomerByCustomerId(customer_id);
         Product product = productService.getProductById(addToCartDTO.getProduct_id());
@@ -88,7 +89,7 @@ public class ShoppingCartRestController {
     }
 
     @PostMapping("/updateShoppingCart")
-    public String updateShoppingCartQuantity(@RequestParam int id, @RequestParam int quantity) {
+    public String updateShoppingCartQuantity(@RequestParam int id, @RequestParam int quantity) throws ProductException {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCartDetail(id);
 
         if (quantity==0){
@@ -117,7 +118,7 @@ public class ShoppingCartRestController {
     }
 
     @PostMapping("/deleteCartItem")
-    public String deleteShoppingCartItem(@RequestParam int id){
+    public String deleteShoppingCartItem(@RequestParam int id) throws ProductException {
         ShoppingCart shoppingCart = shoppingCartService.getShoppingCartDetail(id);
         int quantity = shoppingCart.getQuantity();
         Product product = productService.getProductById(shoppingCart.getProduct_id());
