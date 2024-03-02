@@ -72,16 +72,78 @@ public class ShoppingCartRestController {
         }
         else {
             float amount = product.getPrice() * addToCartDTO.getQuantity();
-
+            ShoppingCart cartItem = new ShoppingCart(addToCartDTO.getProduct_id(),addToCartDTO.getQuantity(), amount, customer);
+            if (product.getAvailableQuantity() >= addToCartDTO.getQuantity()) {
+                shoppingCartService.saveShoppingCart(cartItem);
+                int newQuantity = product.getAvailableQuantity() - addToCartDTO.getQuantity();
+                product.setAvailableQuantity(newQuantity);
+                product = productService.addNewProduct(product);
+                logger.info("Order processed successfully");
+                return "Successfully Added to Cart";
+            } else {
+                return "Not enough available Quantity";
+            }
         }
+    }
 
+    @PostMapping("/updateShoppingCart")
+    public String updateShoppingCartQuantity(@RequestParam int id, @RequestParam int quantity) {
+        ShoppingCart shoppingCart = shoppingCartService.getShoppingCartDetail(id);
 
+        if (quantity==0){
+            shoppingCartService.DeleteShoppingCart(shoppingCart);
+            return "";
+        }
+        else {
+            Product product = productService.getProductById(shoppingCart.getProduct_id());
+            float newAmount = quantity * product.getPrice();
+            if (shoppingCart.getQuantity()>quantity){
+                int difference = shoppingCart.getQuantity() - quantity;
+                product.setAvailableQuantity(product.getAvailableQuantity()+difference);
+                product = productService.addNewProduct(product);
+            }
+            shoppingCart.setQuantity(quantity);
+            shoppingCart.setAmount(newAmount);
+            shoppingCart = shoppingCartService.saveShoppingCart(shoppingCart);
+            if (shoppingCart == null) {
+                return "Can't update the cart";
+            } else {
+                return "Cart successfully updated";
+            }
+        }
 
 
     }
 
+    @PostMapping("/deleteCartItem")
+    public String deleteShoppingCartItem(@RequestParam int id){
+        ShoppingCart shoppingCart = shoppingCartService.getShoppingCartDetail(id);
+        int quantity = shoppingCart.getQuantity();
+        Product product = productService.getProductById(shoppingCart.getProduct_id());
+        int newQuantity = quantity + product.getAvailableQuantity();
+        product.setAvailableQuantity(newQuantity);
+        product = productService.addNewProduct(product);
+        shoppingCartService.DeleteShoppingCart(shoppingCart);
+        if (shoppingCart == null) {
+            return "Can't update the cart";
+        } else {
+            return "Cart successfully updated";
+        }
+    }
 
 
-
+    @PostMapping(value = "/deleteCart")
+    public String deleteShoppingCart(@RequestParam long customer_id){
+        List<ShoppingCart> cartList = shoppingCartService.getShoppingCartDetailsByUserId(customer_id);
+        try {
+            for (ShoppingCart cart : cartList) {
+                shoppingCartService.DeleteShoppingCart(cart);
+            }
+            return "Cart Successfully Removed";
+        }
+        catch (Exception e){
+            return "Can't Remove";
+        }
+    }
 
 }
