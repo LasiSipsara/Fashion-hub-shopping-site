@@ -1,0 +1,62 @@
+.container {
+  margin-top: 50px;
+}
+
+.card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.card-body {
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.remember-forgot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-block {
+  width: 100%;
+}
+
+p {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Icon styles */
+svg {
+  margin-right: 10px;
+}
+
+/* Link styles */
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
